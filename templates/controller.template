@@ -1,0 +1,276 @@
+var request = require('supertest'),
+    should = require('should'),
+    Barrels = require('barrels'),
+    barrels = new Barrels();
+
+
+var <%= modelPlural %> = barrels.data['<%= modelPlural %>'],
+    users = barrels.data['users'],
+    token = '';
+
+
+describe('<%= controller %>', function () {
+
+    before(function (done) {
+        request(sails.hooks.http.app)
+            .post('/login')
+            .send(users.default)
+            .end(function (err, res) {
+                if (err) return done(err);
+                if (res) {
+                    token = res.body.response.data.token;
+                }
+                return done();
+            })
+    });
+
+
+    describe("create()", function() {
+
+
+        it("should return 400: no parameters passed", function (done) {
+
+            request(sails.hooks.http.app)
+                .post('/<%= model %>')
+                .set('Authorization', 'Bearer ' + token)
+                .send({})
+                .expect(400)
+                .end(function(err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    res.body.response.should.have.property('errors');
+
+                    return done();
+                });
+
+        });
+
+<%_.forEach(requiredAttributes, function (attribute, index){%>
+        it('should return 400: no <%=attribute.__name%>', function (done) {
+
+            request(sails.hooks.http.app)
+                .post('/<%=model%>')
+                .set('Authorization', 'Bearer ' + token)
+                .send(<%=modelPlural%>.invalid.no<%=_.str.capitalize(attribute.__name)%>)
+                .expect(400)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+
+                    res.body.response.should.have.property('message');
+                    res.body.response.message.should.containEql('Validation error has occurred');
+
+                    res.body.response.should.have.property('errors');
+                    res.body.response.errors.should.have.property('<%=attribute.__name%>');<%if(attribute.validationMessages){%>
+                    res.body.response.errors.<%=attribute.__name%>.should.containEql(<%=JSON.stringify(attribute.validationMessages[0])%>);<%}%>
+
+                    return done();
+                });
+
+        });
+<%});%>
+
+<% var modelAttributes = _.filter(requiredAttributes, function(attribute) {return attribute.model;});
+_.forEach(modelAttributes, function (attribute, index){%>
+        it('should return 400: invalid <%=attribute.__name%>', function (done) {
+
+            request(sails.hooks.http.app)
+                .post('/<%=model%>')
+                .set('Authorization', 'Bearer ' + token)
+                .send(<%=modelPlural%>.invalid.invalid<%=_.str.capitalize(attribute.__name)%>)
+                .expect(400)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+
+                    res.body.response.should.have.property('message');
+                    res.body.response.should.have.property('errors');
+                    return done();
+                });
+
+        });
+<%});%>
+
+        it("should return 200: <%= model %> created successfully", function (done) {
+
+            request(sails.hooks.http.app)
+                .post('/<%= model %>')
+                .set('Authorization', 'Bearer ' + token)
+                .send(<%= modelPlural %>.valid.create)
+                .expect(200)
+                .end(function(err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    res.body.response.should.have.property('data');
+                    Object.keys(res.body.response.data).length.should.be.above(0);
+
+                    return done();
+                });
+
+        });
+
+
+    });
+
+
+    describe("#read", function () {
+
+
+        it('should return 404: "no <%= model %> found"', function (done) {
+
+            request(sails.hooks.http.app)
+                .get('/<%= model %>/invalid')
+                .set('Authorization', 'Bearer ' + token)
+                .expect(404)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    return done();
+                });
+
+        });
+
+        it('should return 200: "found <%= model %>"', function (done) {
+
+            request(sails.hooks.http.app)
+                .get('/<%= model %>/' + <%= modelPlural %>.valid.default.id)
+                .set('Authorization', 'Bearer ' + token)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+
+                    res.body.response.should.have.property('message');
+
+                    res.body.response.should.have.property('data');
+                    res.body.response.data.should.have.property('organization');
+                    return done();
+                });
+
+        });
+
+
+    });
+
+
+    describe("#list", function () {
+
+        it('should return 200: "found <%= modelPlural %>"', function (done) {
+
+            request(sails.hooks.http.app)
+                .get('/<%= model %>')
+                .set('Authorization', 'Bearer ' + token)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+
+                    res.body.response.should.have.property('message');
+
+                    res.body.response.should.have.property('data');
+                    res.body.response.data.should.be.an.Array;
+                    res.body.response.data.length.should.be.above(0);
+                    return done();
+                });
+
+        });
+
+    });
+
+
+
+    describe("update()", function () {
+
+
+        it("should return 404: invalid <%= model %>", function (done) {
+
+            request(sails.hooks.http.app)
+                .put('/<%= model %>/invalid')
+                .set('Authorization', 'Bearer ' + token)
+                .send({})
+                .expect(404)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    return done();
+                });
+        });
+
+        it("should return 200: updated <%= model %>", function (done) {
+
+            request(sails.hooks.http.app)
+                .put('/<%= model %>/' + <%= modelPlural %>.default.id)
+                .set('Authorization', 'Bearer ' + token)
+                .send(<%= modelPlural %>.valid.update)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+
+                    res.body.response.should.have.property('message');
+
+                    res.body.response.should.have.property('data');
+
+                    return done();
+                });
+
+            });
+
+    });
+
+
+    describe("delete()", function () {
+
+        it("should return 404: invalid <%= model %>", function (done) {
+
+            request(sails.hooks.http.app)
+                .delete('/<%= model %>/invalid')
+                .set('Authorization', 'Bearer ' + token)
+                .expect(404)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    return done();
+                });
+        });
+
+        it("should return 200: delete <%= model %> successfully", function (done) {
+
+            request(sails.hooks.http.app)
+                .delete('/<%= model %>/' + <%= modelPlural %>.default.id)
+                .set('Authorization', 'Bearer ' + token)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) return done(err);
+
+                    res.body.should.have.property('response');
+                    res.body.response.should.have.property('message');
+
+                    return done();
+                });
+        });
+
+
+    });
+
+});

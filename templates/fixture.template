@@ -1,0 +1,8 @@
+{
+    "valid": {
+        "default": <%=generateAttributeJSON(requiredAttributes)%>,
+        "create": <%=generateAttributeJSON(requiredAttributes)%>,
+        "update": <%=generateAttributeJSON(requiredAttributes)%>
+    },
+    "invalid": <%=generateInvalidData(requiredAttributes)%>
+}
