@@ -1,6 +1,6 @@
 {
   "name": "sails-generate-integration-test",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Generate integration test for sails",
   "main": "lib/index.js",
   "keywords": [
