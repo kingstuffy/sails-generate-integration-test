@@ -6,6 +6,7 @@ var request = require('supertest'),
 
 var <%= modelPlural %> = barrels.data['<%= modelPlural %>'],
     users = barrels.data['users'],
+    organizations = barrels.data['organization'],
     token = '';
 
 var requiredAttributes = <%= generateRequiredAttributes(requiredAttributes) %>;
@@ -14,7 +15,11 @@ describe('<%= controller %>', function () {
 
     before("create <%= modelPlural %> records for update and delete operations", function (done) {
 
-        var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
+        <%= modelPlural %>.valid.default.organization = organizations.default.id;
+        <%= modelPlural %>.valid.update.organization = organizations.default.id;
+        <%= modelPlural %>.valid.delete.organization = organizations.default.id;
+
+        var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.default, <%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
         <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
             <%= modelPlural %>.valid.update.id = update<%= modelCapitalized %>.id;
             <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
