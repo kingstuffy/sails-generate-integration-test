@@ -10,10 +10,10 @@
         "generate",
         "plugin"
     ],
-    "author": "King Stuffy",
+    "author": "Olawale Stuffy",
     "repository": {
         "type": "git",
-        "url": "git://github.com/brentertz/scapegoat.git"
+        "url": "git://github.com/kingstuffy/sails-generate-integration-test.git"
     },
     "license": "MIT",
     "dependencies": {
