@@ -20,8 +20,8 @@ describe('<%= controller %>', function () {
         <%= modelPlural %>.valid.delete.organization = organizations.default.id;
 
         var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.default, <%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
-        <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (delete<%= modelCapitalized %>, update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
-            <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
+        <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (default<%= modelCapitalized %>, update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
+            <%= modelPlural %>.valid.default.id = default<%= modelCapitalized %>.id;
             <%= modelPlural %>.valid.update.id = update<%= modelCapitalized %>.id;
             <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
             return done();
@@ -32,7 +32,8 @@ describe('<%= controller %>', function () {
     before("login and get user token", function (done) {
         request(sails.hooks.http.app)
             .post('/login')
-            .send(users.default)
+            .send(users.valid.default)
+            .send(users.valid.default)
             .end(function (err, res) {
                 if (err) return done(err);
                 if (res) {
