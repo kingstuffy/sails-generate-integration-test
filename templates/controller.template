@@ -13,7 +13,18 @@ var requiredAttributes = <%= generateRequiredAttributes(requiredAttributes) %>;
 
 describe('<%= controller %>', function () {
 
-    before(function (done) {
+    before("create <%= modelPlural %> fixtures for update and delete", function (done) {
+
+        var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
+        <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
+            <%= modelPlural %>.valid.update.id = update<%= modelCapitalized %>.id;
+            <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
+            return done();
+        });
+
+    });
+
+    before("login and get user token", function (done) {
         request(sails.hooks.http.app)
             .post('/login')
             .send(users.default)
@@ -212,10 +223,11 @@ _.forEach(modelAttributes, function (attribute, index){%>
 
         it("should return 200: updated <%= model %>", function (done) {
 
+            var updateData = {};
             request(sails.hooks.http.app)
-                .put('/<%= model %>/' + <%= modelPlural %>.default.id)
+                .put('/<%= model %>/' + <%= modelPlural %>.update.id)
                 .set('Authorization', 'Bearer ' + token)
-                .send(<%= modelPlural %>.valid.update)
+                .send(updateData)
                 .expect(200)
                 .end(function (err, res) {
                     if (err) return done(err);
@@ -254,7 +266,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
         it("should return 200: delete <%= model %> successfully", function (done) {
 
             request(sails.hooks.http.app)
-                .delete('/<%= model %>/' + <%= modelPlural %>.default.id)
+                .delete('/<%= model %>/' + <%= modelPlural %>.delete.id)
                 .set('Authorization', 'Bearer ' + token)
                 .expect(200)
                 .end(function (err, res) {
@@ -268,6 +280,13 @@ _.forEach(modelAttributes, function (attribute, index){%>
         });
 
 
+    });
+
+
+    after("delete all created <%= modelPlural %> asides the default", function (done) {
+        <%= modelCapitalized %>.destroy({id: {'!': <%= modelPlural %>.valid.default.id}}).then(function() {
+            return done();
+        });
     });
 
 });
