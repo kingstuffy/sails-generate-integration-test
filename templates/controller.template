@@ -25,7 +25,7 @@ describe('<%= controller %>', function () {
     });
 
 
-    describe("create()", function() {
+    describe("create(): [POST /<%= model %>]", function() {
 
 
         it("should return 400: no parameters passed", function (done) {
@@ -121,7 +121,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
     });
 
 
-    describe("#read", function () {
+    describe("#read(): [GET /<%= model %>/:id]", function () {
 
 
         it('should return 404: "no <%= model %> found"', function (done) {
@@ -151,9 +151,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     if (err) return done(err);
 
                     res.body.should.have.property('response');
-
                     res.body.response.should.have.property('message');
-
                     res.body.response.should.have.property('data');
                     res.body.response.data.should.have.property('organization');
                     return done();
@@ -165,7 +163,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
     });
 
 
-    describe("#list", function () {
+    describe("#list(): [GET /<%= model %>]", function () {
 
         it('should return 200: "found <%= modelPlural %>"', function (done) {
 
@@ -177,9 +175,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     if (err) return done(err);
 
                     res.body.should.have.property('response');
-
                     res.body.response.should.have.property('message');
-
                     res.body.response.should.have.property('data');
                     res.body.response.data.should.be.an.Array;
                     res.body.response.data.length.should.be.above(0);
@@ -192,7 +188,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
 
 
 
-    describe("update()", function () {
+    describe("update(): [PUT /<%= model %>/:id]", function () {
 
 
         it("should return 404: invalid <%= model %>", function (done) {
@@ -223,9 +219,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     if (err) return done(err);
 
                     res.body.should.have.property('response');
-
                     res.body.response.should.have.property('message');
-
                     res.body.response.should.have.property('data');
 
                     return done();
@@ -236,7 +230,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
     });
 
 
-    describe("delete()", function () {
+    describe("delete(): [DELETE /<%= model %>/:id]", function () {
 
         it("should return 404: invalid <%= model %>", function (done) {
 
