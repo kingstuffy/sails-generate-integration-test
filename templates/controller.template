@@ -10,10 +10,9 @@ var <%= modelPlural %> = barrels.data['<%= modelPlural %>'],
 
 var requiredAttributes = <%= generateRequiredAttributes(requiredAttributes) %>;
 
-
 describe('<%= controller %>', function () {
 
-    before("create <%= modelPlural %> fixtures for update and delete", function (done) {
+    before("create <%= modelPlural %> records for update and delete operations", function (done) {
 
         var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
         <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
@@ -84,8 +83,8 @@ describe('<%= controller %>', function () {
         });
 <%});%>
 
-<% var modelAttributes = _.filter(requiredAttributes, function(attribute) {return attribute.model;});
-_.forEach(modelAttributes, function (attribute, index){%>
+
+<%_.forEach(modelAttributes, function (attribute, index){%>
         it('should return 400: invalid <%=attribute.__name%>', function (done) {
 
             request(sails.hooks.http.app)
