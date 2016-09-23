@@ -1,35 +1,35 @@
 {
-    "name": "sails-generate-integration-test",
-    "version": "0.0.1",
-    "description": "Generate integration test for sails",
-    "main": "lib/index.js",
-    "keywords": [
-        "integration-test",
-        "generator",
-        "sails",
-        "generate",
-        "plugin"
-    ],
-    "author": "Olawale Stuffy",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/kingstuffy/sails-generate-integration-test.git"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "lodash": ">=2.4.x",
-        "merge-defaults": ">=0.1.0",
-        "pluralize": "^3.0.0",
-        "underscore.string": "^3.3.4"
-    },
-    "devDependencies": {
-        "sails-generate": "*",
-        "reportback": "*",
-        "fs-extra": "*"
-    },
-    "sailsGenerator": {
-        "type": "integration-test",
-        "behavior": "overrides `sails generate integration-test`",
-        "sailsVersion": "~0.10.0"
-    }
+  "name": "sails-generate-integration-test",
+  "version": "0.1.0",
+  "description": "Generate integration test for sails",
+  "main": "lib/index.js",
+  "keywords": [
+    "integration-test",
+    "generator",
+    "sails",
+    "generate",
+    "plugin"
+  ],
+  "author": "Olawale Stuffy",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kingstuffy/sails-generate-integration-test.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "lodash": ">=2.4.x",
+    "merge-defaults": ">=0.1.0",
+    "pluralize": "^3.0.0",
+    "underscore.string": "^3.3.4"
+  },
+  "devDependencies": {
+    "sails-generate": "*",
+    "reportback": "*",
+    "fs-extra": "*"
+  },
+  "sailsGenerator": {
+    "type": "integration-test",
+    "behavior": "overrides `sails generate integration-test`",
+    "sailsVersion": "~0.10.0"
+  }
 }
