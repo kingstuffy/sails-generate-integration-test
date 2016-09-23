@@ -20,7 +20,8 @@ describe('<%= controller %>', function () {
         <%= modelPlural %>.valid.delete.organization = organizations.default.id;
 
         var create<%= modelCapitalized %>Array = [<%= modelPlural %>.valid.default, <%= modelPlural %>.valid.update, <%= modelPlural %>.valid.delete];
-        <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
+        <%= modelCapitalized %>.create(create<%= modelCapitalized %>Array).spread(function (delete<%= modelCapitalized %>, update<%= modelCapitalized %>, delete<%= modelCapitalized %>) {
+            <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
             <%= modelPlural %>.valid.update.id = update<%= modelCapitalized %>.id;
             <%= modelPlural %>.valid.delete.id = delete<%= modelCapitalized %>.id;
             return done();
