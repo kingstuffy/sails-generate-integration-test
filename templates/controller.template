@@ -8,6 +8,8 @@ var <%= modelPlural %> = barrels.data['<%= modelPlural %>'],
     users = barrels.data['users'],
     token = '';
 
+var requiredAttributes = <%= generateRequiredAttributes(requiredAttributes) %>;
+
 
 describe('<%= controller %>', function () {
 
@@ -40,7 +42,6 @@ describe('<%= controller %>', function () {
 
                     res.body.should.have.property('response');
                     res.body.response.should.have.property('message');
-
                     res.body.response.should.have.property('errors');
 
                     return done();
@@ -60,10 +61,8 @@ describe('<%= controller %>', function () {
                     if (err) return done(err);
 
                     res.body.should.have.property('response');
-
                     res.body.response.should.have.property('message');
                     res.body.response.message.should.containEql('Validation error has occurred');
-
                     res.body.response.should.have.property('errors');
                     res.body.response.errors.should.have.property('<%=attribute.__name%>');<%if(attribute.validationMessages){%>
                     res.body.response.errors.<%=attribute.__name%>.should.containEql(<%=JSON.stringify(attribute.validationMessages[0])%>);<%}%>
@@ -87,7 +86,6 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     if (err) return done(err);
 
                     res.body.should.have.property('response');
-
                     res.body.response.should.have.property('message');
                     res.body.response.should.have.property('errors');
                     return done();
@@ -108,9 +106,9 @@ _.forEach(modelAttributes, function (attribute, index){%>
 
                     res.body.should.have.property('response');
                     res.body.response.should.have.property('message');
-
                     res.body.response.should.have.property('data');
                     Object.keys(res.body.response.data).length.should.be.above(0);
+                    res.body.response.data.should.have.properties(requiredAttributes);
 
                     return done();
                 });
@@ -135,6 +133,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
 
                     res.body.should.have.property('response');
                     res.body.response.should.have.property('message');
+                    res.body.response.data.should.have.properties(requiredAttributes);
 
                     return done();
                 });
@@ -154,6 +153,8 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     res.body.response.should.have.property('message');
                     res.body.response.should.have.property('data');
                     res.body.response.data.should.have.property('organization');
+                    res.body.response.data.should.have.properties(requiredAttributes);
+
                     return done();
                 });
 
@@ -179,6 +180,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     res.body.response.should.have.property('data');
                     res.body.response.data.should.be.an.Array;
                     res.body.response.data.length.should.be.above(0);
+
                     return done();
                 });
 
@@ -221,6 +223,7 @@ _.forEach(modelAttributes, function (attribute, index){%>
                     res.body.should.have.property('response');
                     res.body.response.should.have.property('message');
                     res.body.response.should.have.property('data');
+                    res.body.response.data.should.have.properties(requiredAttributes);
 
                     return done();
                 });
