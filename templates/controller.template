@@ -33,7 +33,6 @@ describe('<%= controller %>', function () {
         request(sails.hooks.http.app)
             .post('/login')
             .send(users.valid.default)
-            .send(users.valid.default)
             .end(function (err, res) {
                 if (err) return done(err);
                 if (res) {
@@ -150,7 +149,6 @@ describe('<%= controller %>', function () {
 
                     res.body.should.have.property('response');
                     res.body.response.should.have.property('message');
-                    res.body.response.data.should.have.properties(requiredAttributes);
 
                     return done();
                 });
@@ -231,7 +229,7 @@ describe('<%= controller %>', function () {
 
             var updateData = {};
             request(sails.hooks.http.app)
-                .put('/<%= model %>/' + <%= modelPlural %>.update.id)
+                .put('/<%= model %>/' + <%= modelPlural %>.valid.update.id)
                 .set('Authorization', 'Bearer ' + token)
                 .send(updateData)
                 .expect(200)
@@ -272,7 +270,7 @@ describe('<%= controller %>', function () {
         it("should return 200: delete <%= model %> successfully", function (done) {
 
             request(sails.hooks.http.app)
-                .delete('/<%= model %>/' + <%= modelPlural %>.delete.id)
+                .delete('/<%= model %>/' + <%= modelPlural %>.valid.delete.id)
                 .set('Authorization', 'Bearer ' + token)
                 .expect(200)
                 .end(function (err, res) {
